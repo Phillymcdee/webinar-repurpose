@@ -68,7 +68,7 @@
 
   <script>
     const form = document.getElementById('lead'); const msg = document.getElementById('msg');
-    const WEBHOOK = 'https://api.activepieces.com/v1/webhooks/YOUR-AP-TRIGGER-ID'; // <-- replace with your AP webhook URL
+    const WEBHOOK = 'https://cloud.activepieces.com/api/v1/webhooks/MEtnk1me06eIQukoUQxeA/test'; // <-- replace with your AP webhook URL
     form.addEventListener('submit', async (e) => {
       e.preventDefault(); msg.textContent = 'Sending...';
       const payload = Object.fromEntries(new FormData(form).entries());
