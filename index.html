@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Webinar → Content, Done in 48 Hours</title>
+  <style>
+    :root{--bg:#0e0f11;--fg:#eef0f3;--muted:#9aa3ad;--acc:#6cf;}
+    *{box-sizing:border-box} body{margin:0;font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+    .wrap{max-width:880px;margin:0 auto;padding:48px 20px}
+    .hero{display:grid;gap:16px;margin:24px 0}
+    h1{font-size:40px;line-height:1.15;margin:0}
+    p.lead{font-size:18px;color:var(--muted);margin:8px 0 0}
+    .card{background:#14161a;border:1px solid #1f2328;border-radius:16px;padding:20px;margin:24px 0}
+    .row{display:grid;gap:12px}
+    @media(min-width:720px){.row{grid-template-columns:1fr 1fr}}
+    label{font-size:14px;color:var(--muted)}
+    input,textarea{width:100%;padding:12px 14px;border:1px solid #2a2f36;background:#0e1116;color:var(--fg);border-radius:10px}
+    button{cursor:pointer;border:0;background:var(--acc);color:#001018;padding:12px 16px;border-radius:10px;font-weight:600}
+    .muted{color:var(--muted);font-size:14px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .badge{display:inline-block;background:#10131a;border:1px solid #1f2328;border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+    .grid{display:grid;gap:12px}
+    .ok{border-color:#2b885b;background:#0f1a15}
+    .err{border-color:#a33;background:#1a1010}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <span class="badge">For B2B marketing teams that run webinars</span>
+      <h1>Turn every webinar into 12+ assets in 48 hours</h1>
+      <p class="lead">Blogs, LinkedIn posts, email copy, shorts & clips—delivered reliably, without adding headcount.</p>
+      <div class="cta">
+        <a href="https://calendly.com/YOUR-CALENDLY/15min" target="_blank"><button>Book 15-min fit call</button></a>
+        <span class="muted">or leave your details—We’ll bring ideas specific to your last webinar.</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <form id="lead" class="grid">
+        <div class="row">
+          <div><label>Name</label><input name="name" required/></div>
+          <div><label>Work email</label><input name="email" type="email" required/></div>
+        </div>
+        <div class="row">
+          <div><label>Company</label><input name="company" /></div>
+          <div><label>Website</label><input name="website" /></div>
+        </div>
+        <div>
+          <label>Link to a recent webinar (YouTube/Vimeo/Drive)</label>
+          <input name="webinar_url" placeholder="https://..." />
+        </div>
+        <div>
+          <label>What do you want most from repurposing?</label>
+          <textarea name="goal" rows="3" placeholder="e.g., drive MQLs, LinkedIn presence for execs, email nurture content"></textarea>
+        </div>
+        <div><button type="submit">Send & get a free content map</button> <span id="msg" class="muted"></span></div>
+      </form>
+    </section>
+
+    <section class="grid card">
+      <div><b>What you get per webinar</b><br/>1 long-form blog, 6–10 LinkedIn posts, 1 email newsletter, 8–12 short clips, 10 quote cards, SEO briefs.</div>
+      <div><b>Turnaround</b><br/>48 hours from receipt of recording and slide deck.</div>
+      <div><b>Guarantee</b><br/>If you don’t publish at least 8 assets in week 1, we re-do at no cost.</div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('lead'); const msg = document.getElementById('msg');
+    const WEBHOOK = 'https://api.activepieces.com/v1/webhooks/YOUR-AP-TRIGGER-ID'; // <-- replace with your AP webhook URL
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); msg.textContent = 'Sending...';
+      const payload = Object.fromEntries(new FormData(form).entries());
+      try{
+        const r = await fetch(WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+        if(!r.ok) throw new Error('Bad response');
+        msg.textContent = 'Got it — check your email shortly.'; form.classList.add('ok');
+        form.reset();
+      }catch(err){ msg.textContent='Something went wrong. Please email hello@yourdomain.com.'; form.classList.add('err');}
+    });
+  </script>
+</body>
+</html>
